@@ -113,3 +113,7 @@ fabric.properties
 /.idea/compiler.xml
 /.idea/jarRepositories.xml
 /.idea/misc.xml
+/.idea/git_toolbox_prj.xml
+/spring-mvc.iml
+/.idea/artifacts/spring_mvc_Web_exploded.xml
+/.idea/vcs.xml
