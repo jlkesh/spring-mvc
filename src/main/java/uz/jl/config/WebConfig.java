@@ -1,6 +1,5 @@
 package uz.jl.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -14,10 +13,9 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 import org.thymeleaf.templatemode.TemplateMode;
+import com.zaxxer.hikari.HikariDataSource;
 
-import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
-import java.util.Arrays;
 import java.util.Objects;
 
 @Configuration
@@ -75,11 +73,14 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Bean
     public DataSource dataSource() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        HikariDataSource dataSource = new HikariDataSource();
         dataSource.setDriverClassName(Objects.requireNonNull(env.getDriver()));
-        dataSource.setUrl(env.getUrl());
+        dataSource.setJdbcUrl(env.getUrl());
         dataSource.setUsername(env.getUsername());
         dataSource.setPassword(env.getPassword());
+        dataSource.setMaximumPoolSize(20);
+        dataSource.setMinimumIdle(10);
+        dataSource.setIdleTimeout(10 * 60 * 1000);
         return dataSource;
     }
 

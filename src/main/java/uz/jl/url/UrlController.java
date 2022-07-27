@@ -8,8 +8,8 @@ import org.springframework.web.servlet.ModelAndView;
 import uz.jl.url.dto.UrlCreateDTO;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 @Controller
 @RequiredArgsConstructor
@@ -38,21 +38,9 @@ public class UrlController {
 
 
     @RequestMapping(value = "/go/{shortenedUrl}", method = RequestMethod.GET)
-    public void urlGeneratePage(@PathVariable String shortenedUrl, HttpServletResponse response) {
+    public void urlGeneratePage(@PathVariable String shortenedUrl, HttpServletResponse response) throws IOException {
         UrlDomain urlDomain = service.findByShortenedUrl(shortenedUrl);
-        try {
-            TimeUnit.SECONDS.sleep(1);
-            response.sendRedirect(urlDomain.getOriginalUrl());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        response.sendRedirect(urlDomain.getOriginalUrl());
     }
-
-    @ResponseBody
-    @ExceptionHandler(RuntimeException.class)
-    public String urlNotFoundException(RuntimeException e) {
-        return e.getMessage();
-    }
-
 
 }
