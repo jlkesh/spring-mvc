@@ -1,6 +1,7 @@
 package uz.jl.url;
 
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -11,14 +12,10 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Controller
+@RequiredArgsConstructor
 public class UrlController {
 
-
     private final UrlService service;
-
-    public UrlController(UrlService service) {
-        this.service = service;
-    }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     public ModelAndView homePage() {
