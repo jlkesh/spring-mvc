@@ -7,7 +7,6 @@ import org.springframework.web.servlet.ModelAndView;
 import uz.jl.url.dto.UrlCreateDTO;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
