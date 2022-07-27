@@ -117,3 +117,4 @@ fabric.properties
 /spring-mvc.iml
 /.idea/artifacts/spring_mvc_Web_exploded.xml
 /.idea/vcs.xml
+/.idea/dataSources.xml
