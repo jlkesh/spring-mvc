@@ -44,9 +44,9 @@ public class UrlController {
 
     @RequestMapping(value = "/gen/", method = RequestMethod.POST)
     public String urlGenerate(@Valid @ModelAttribute("dto") UrlCreateDTO dto, BindingResult result) {
-        service.generate(dto, result);
         if (result.hasErrors())
             return "gen/url-generate-page";
+        service.generate(dto);
         return "redirect:/";
     }
 

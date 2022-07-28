@@ -2,6 +2,7 @@ package uz.jl.url.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import uz.jl.annotations.ValidLocalDateTime;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -21,6 +22,7 @@ public class UrlCreateDTO {
     @NotBlank
     private String description;
 
+    @ValidLocalDateTime(message = "value for expiration field invalid")
     private String validTill;
 
     @JsonIgnore
