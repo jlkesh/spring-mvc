@@ -1,7 +1,10 @@
 package uz.jl.url.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import java.time.LocalDateTime;
 
 @Getter
@@ -10,7 +13,17 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class UrlCreateDTO {
+
+    @NotBlank(message = "Original name can not be null")
+    @Pattern(regexp = "^(https://|http://).*", message = "Must be valid link exl(olx.uz)")
     private String originalURL;
+
+    @NotBlank
     private String description;
+
     private String validTill;
+
+    @JsonIgnore
+    private LocalDateTime expiration;
+
 }

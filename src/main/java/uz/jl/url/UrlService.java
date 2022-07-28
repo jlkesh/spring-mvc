@@ -2,11 +2,15 @@ package uz.jl.url;
 
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
+import org.springframework.util.StringUtils;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import uz.jl.url.dto.UrlCreateDTO;
+import uz.jl.util.Utils;
 
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class UrlService {
@@ -17,17 +21,31 @@ public class UrlService {
         this.dao = dao;
     }
 
-    public void generate(UrlCreateDTO dto) {
+    public void generate(UrlCreateDTO dto, BindingResult result) {
 
-        LocalDateTime validTill = Objects.nonNull(dto.getValidTill())
-                ? LocalDateTime.parse(dto.getValidTill())
-                : LocalDateTime.now().plusMinutes(10);
+        if (!Utils.isParsable(dto.getValidTill()) && StringUtils.hasText(dto.getValidTill())) {
+            result.addError(new FieldError(
+                    "dto",
+                    "validTill",
+                    "Data for url expiration invalid"));
+            return;
+        } else if (!StringUtils.hasText(dto.getValidTill())) {
+            dto.setExpiration(LocalDateTime.now(Clock.systemDefaultZone()).plusDays(10));
+        } else dto.setExpiration(Utils.toLocalDateTime(dto.getValidTill()));
+
+        if (dto.getExpiration().isBefore(LocalDateTime.now(Clock.systemDefaultZone()))) {
+            result.addError(new FieldError(
+                    "dto",
+                    "validTill",
+                    "Time is not valid is must be future time"));
+            return;
+        }
         String shortenedURL = DigestUtils.md5DigestAsHex(dto.getOriginalURL().getBytes());
         UrlDomain urlDomain = UrlDomain.builder()
                 .originalUrl(dto.getOriginalURL())
                 .createdAt(LocalDateTime.now())
                 .description(dto.getDescription())
-                .validTill(validTill)
+                .validTill(dto.getExpiration())
                 .shortenedUrl(shortenedURL)
                 .build();
         dao.save(urlDomain);
